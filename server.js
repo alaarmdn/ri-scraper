@@ -13,11 +13,11 @@ app.all("/scrape", async (req, res) => {
     if (!executablePath) return res.status(500).send("Chromium not found");
 
     const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath,
-      headless: chromium.headless,
-    });
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: chromium.headless,
+      });      
 
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle0", timeout: 120000 });
