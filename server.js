@@ -1,34 +1,25 @@
-const express = require("express");
-const chromium = require("chrome-aws-lambda");
-const puppeteer = require("puppeteer-core");
-
+// server.js
+const express = require('express');
+const puppeteer = require('puppeteer');
 const app = express();
 
-app.all("/scrape", async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).send("No URL provided");
+app.get('/scrape', async (req, res) => {
+    const url = req.query.url;
+    if (!url) return res.status(400).send('Missing URL');
 
-  try {
-    const executablePath = await chromium.executablePath;
-    if (!executablePath) return res.status(500).send("Chromium not found");
+    try {
+        const browser = await puppeteer.launch({ headless: true });
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: 'networkidle2' });
 
-    const browser = await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
-      });      
+        // خذي الـ HTML النهائي بعد تنفيذ JS
+        const content = await page.content();
 
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 120000 });
-    const html = await page.content();
-    await browser.close();
-
-    res.send(html);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error: " + err.message);
-  }
+        await browser.close();
+        res.send(content);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
-app.listen(3000, () => console.log("Server running on port 3000"));
+app.listen(3000, () => console.log('Scraper running on port 3000'));
