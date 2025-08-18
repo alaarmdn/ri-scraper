@@ -36,8 +36,9 @@ app.get('/scrape', async (req, res) => {
 
     let browser;
     try {
-        browser = await puppeteer.launch({
-            headless: true, // يفضل تبقى true في الإنتاج
+        const browser = await puppeteer.launch({
+            headless: true,
+            executablePath: puppeteer.executablePath(),
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
@@ -45,10 +46,10 @@ app.get('/scrape', async (req, res) => {
                 '--disable-accelerated-2d-canvas',
                 '--no-first-run',
                 '--no-zygote',
-                '--single-process', // أحياناً مطلوب في ويندوز
+                '--single-process',
                 '--disable-gpu'
             ]
-        });
+        });        
 
         const page = await browser.newPage();
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
