@@ -40,7 +40,7 @@ app.get('/scrape', async (req, res) => {
             headless: true,
             executablePath: puppeteer.executablePath('chromium'),
             args: ['--no-sandbox', '--disable-setuid-sandbox']
-          });              
+          });                        
 
         const page = await browser.newPage();
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
