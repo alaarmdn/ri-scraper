@@ -38,12 +38,12 @@ app.get('/scrape', async (req, res) => {
     try {
         const browser = await puppeteer.launch({
             headless: true,
-            executablePath: puppeteer.executablePath('chromium'), // ← مهم جداً
+            executablePath: puppeteer.executablePath('chrome-headless-shell'),
             args: ['--no-sandbox', '--disable-setuid-sandbox']
-          });                                 
+          });                                           
 
         const page = await browser.newPage();
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 180000 }); // 3 دقائق
 
         // هات المحتوى النهائي بعد تنفيذ JS
         const content = await page.content();
