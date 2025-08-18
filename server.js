@@ -36,21 +36,11 @@ app.get('/scrape', async (req, res) => {
 
     let browser;
     try {
-        const execPath = puppeteer.executablePath().replace('chrome', 'chromium');
         const browser = await puppeteer.launch({
             headless: true,
-            eexecutablePath: execPath,
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--no-first-run',
-                '--no-zygote',
-                '--single-process',
-                '--disable-gpu'
-            ]
-        });        
+            executablePath: puppeteer.executablePath('chrome'),
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+          });     
 
         const page = await browser.newPage();
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
