@@ -37,8 +37,7 @@ app.get('/scrape', async (req, res) => {
     let browser;
     try {
         const browser = await puppeteer.launch({
-            executablePath: puppeteer.executablePath().replace('chrome', 'chromium'),
-            headless: true,
+            const execPath = puppeteer.executablePath().replace('chrome', 'chromium');            headless: true,
             eexecutablePath: execPath,
             args: [
                 '--no-sandbox',
