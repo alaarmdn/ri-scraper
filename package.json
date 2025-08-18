@@ -13,11 +13,7 @@
   "type": "commonjs",
   "dependencies": {
     "body-parser": "2.2.0",
-    "chrome-aws-lambda": "1.20.4",
     "express": "5.1.0",
-    "puppeteer": "^20.0.0"
-  },
-  "engines": {
-  "node": "18.x"
-}
+    "puppeteer": "^24.16.2"
+  }
 }
